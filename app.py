@@ -292,6 +292,19 @@ def google_authorize():
         session['typing_rhythm'] = 'OAuth 2.0 Verified'
         return redirect(url_for('index'))
     return redirect(url_for('login'))
+import time
+
+def cleanup_old_uploads(folder='uploads', max_age_seconds=300):
+    if not os.path.exists(folder):
+        return
+    now = time.time()
+    for fname in os.listdir(folder):
+        fpath = os.path.join(folder, fname)
+        if os.path.isfile(fpath) and (now - os.path.getmtime(fpath) > max_age_seconds):
+            try:
+                os.remove(fpath)
+            except Exception:
+                pass
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
