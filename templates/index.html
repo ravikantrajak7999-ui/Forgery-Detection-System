@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[FORGERY DETECTION SYSTEM-TACTICAL THREAT OPERATIONS ]</title>
+    <style>
+        :root { 
+            --bg-dark: #010402; --cyber-cyan: #00ffff; --matrix-green: #4ef037; --danger-red: #ff3333; --warning-yellow: #ffcc00;
+            --panel-bg: rgba(2, 10, 5, 0.9); --glass-border: rgba(78, 240, 55, 0.25);
+        }
+        body { 
+            background-color: var(--bg-dark); color: #fff; font-family: 'Courier New', monospace; 
+            margin: 0; padding: 1.5rem; box-sizing: border-box; min-height: 100vh;
+            background-image: linear-gradient(rgba(78, 240, 20, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(78, 240, 20, 0.015) 1px, transparent 1px); 
+            background-size: 25px 20px; display: flex; justify-content: center; align-items: center;
+        }
+        .main-container { width: 100%; max-width: 1200px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem; }
+        .left-column, .right-column { display: flex; flex-direction: column; gap: 1.5rem; }
+        .squad-panel { background: var(--panel-bg); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 4px; box-shadow: 0 0 25px rgba(78,240,55,0.05); position: relative !important; }
+        .panel-header { font-size: 0.85rem; font-weight: bold; color: var(--matrix-green); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem; margin-bottom: 1rem; letter-spacing: 1px; text-transform: uppercase; text-align: left; }
+        
+        /* 🚨 माइक्रो-नियॉन लाइट्स का परफेक्ट पोजीशन और कतार फिक्स */
+        .led-indicator-container { 
+            display: flex !important; 
+            gap: 6px !important; 
+            position: absolute !important; 
+            top: 1.3rem !important; 
+            right: 4.5rem !important; 
+            z-index: 999 !important; 
+            width: auto !important; 
+        }
+        
+        /* 💡 आपके पुराने कोड वाला परफेक्ट साइज़ (8px) और डिफ़ॉल्ट हल्की ऑन स्थिति */
+        .led-light { 
+            width: 8px !important; 
+            height: 8px !important; 
+            border-radius: 50% !important; 
+            display: inline-block !important; 
+            opacity: 0.35 !important; /* डिफ़ॉल्ट रूप से तीनों हल्की जलती रहेंगी */
+            border: 1px solid rgba(255,255,255,0.08) !important; 
+            transition: all 0.3s ease; 
+        }
+
+        /* तीनों बत्तियों का डिफ़ॉल्ट बैकग्राउंड और हल्का नियॉन ग्लो */
+        #ledRed { background: var(--danger-red) !important; box-shadow: 0 0 4px var(--danger-red) !important; }
+        #ledYellow { background: var(--warning-yellow) !important; box-shadow: 0 0 4px var(--warning-yellow) !important; }
+        #ledGreen { background: var(--matrix-green) !important; box-shadow: 0 0 4px var(--matrix-green) !important; }
+        
+        /* 🚨 माइक्रो-नियॉन लाइट्स का पोजीशन और कतार फिक्स */
+        .led-indicator-container { 
+            display: flex !important; 
+            gap: 8px !important; 
+            position: absolute !important; 
+            top: 1.3rem !important; 
+            right: 4.5rem !important; 
+            z-index: 999 !important; 
+            width: auto !important; 
+        }
+        
+        /* 💡 डिफ़ॉल्ट रूप से तीनों लाइट्स ऐसा लगेंगी कि हाँ हल्की-हल्की जल रही हैं (ज्यादा तेज नहीं) */
+        .led-light { 
+            width: 9px !important; 
+            height: 9px !important; 
+            border-radius: 50% !important; 
+            display: inline-block !important; 
+            opacity: 0.35 !important; /* हल्की जलती हुई दिखेगी, ज्यादा गाढ़ी नहीं */
+            transition: all 0.3s ease;
+        }
+
+        /* तीनों बत्तियों का डिफ़ॉल्ट धीमा ग्लो (Static Light) */
+        #ledRed { background: var(--danger-red) !important; box-shadow: 0 0 4px var(--danger-red) !important; }
+        #ledYellow { background: var(--warning-yellow) !important; box-shadow: 0 0 4px var(--warning-yellow) !important; }
+        #ledGreen { background: var(--matrix-green) !important; box-shadow: 0 0 4px var(--matrix-green) !important; }
+        
+        /* 🚨 एक्टिव होने वाली बत्ती फुल रोशनी में आकर मस्त ब्लिंक करेगी */
+        .led-glow-red { 
+            opacity: 1 !important; 
+            box-shadow: 0 0 15px var(--danger-red), 0 0 5px var(--danger-red) !important; 
+            animation: hacker-blinker 0.4s infinite alternate !important; 
+        }
+        /* 🚨 पीली लाइट का नियॉन ग्लो फिक्स - ताकि शुरुआत में यह कड़क चमके */
+        .led-glow-yellow { 
+            background: var(--warning-yellow) !important;
+            opacity: 1 !important; 
+            box-shadow: 0 0 15px var(--warning-yellow), 0 0 5px var(--warning-yellow) !important; 
+            animation: hacker-blinker 0.8s infinite alternate !important; 
+        }
+        
+        .led-glow-green { 
+            opacity: 1 !important; 
+            box-shadow: 0 0 15px var(--matrix-green), 0 0 5px var(--matrix-green) !important; 
+            animation: hacker-blinker 0.6s infinite alternate !important; 
+        }
+        
+        /* लपकने (Blinking) का अचूक एनीमेशन */
+        @keyframes hacker-blinker { 
+            0% { opacity: 0.35; transform: scale(0.95); } 
+            100% { opacity: 1; transform: scale(1.05); } 
+        }
+        .upload-zone { border: 1px dashed var(--matrix-green); padding: 2rem; text-align: center; background: rgba(0,0,0,0.6); cursor: pointer; border-radius: 2px; }
+        .gateway-btn { width: 100%; padding: 0.85rem; background: #00ffff; color: #000; border: none; font-weight: bold; letter-spacing: 1px; cursor: pointer; font-size: 0.9rem; text-transform: uppercase; font-family: monospace; box-shadow: 0 0 15px rgba(0,255,255,0.2); margin-top: 5px; }
+        .gateway-btn:hover { background: #00cccc; box-shadow: 0 0 25px rgba(0,255,255,0.4); }
+        .dual-monitors { display: flex; gap: 1rem; justify-content: center; width: 100%; }
+        .monitor-box { flex: 1; text-align: center; }
+        .monitor-box span { font-size: 0.75rem; color: var(--matrix-green); display: block; margin-bottom: 0.4rem; font-weight: bold; }
+        .display-feed { height: 220px; border: 1px solid var(--matrix-green); background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .display-feed img { max-width: 95%; max-height: 95%; object-fit: contain; z-index: 2; position: relative; }
+        .scan-laser { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(180deg, rgba(78,240,55,0.8), transparent); animation: laser-move 2s infinite linear; z-index: 3; box-shadow: 0 0 8px var(--matrix-green); }
+        @keyframes laser-move { 0% { top: 0%; } 100% { top: 100%; } }
+        .hub-monitor-grid { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1rem; }
+        .circular-gauge { width: 90px; height: 95px; border: 3px solid var(--matrix-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: bold; color: var(--matrix-green); box-shadow: 0 0 15px rgba(78,240,55,0.2); background: #000; }
+        .verdict-text-block { text-align: left; }
+        .verdict-header { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin: 0; }
+        .verdict-status { font-size: 1.2rem; font-weight: bold; color: var(--matrix-green); margin: 2px 0 0 0; letter-spacing: 1px; }
+        .threat-bar-container { width: 100%; background: #111; height: 8px; border-radius: 4px; margin-bottom: 1.5rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .threat-bar { height: 100%; width: 0%; background: var(--matrix-green); transition: width 2s ease-in-out; }
+        .module-sub-panel { border: 1px solid rgba(78, 240, 55, 0.1); padding: 0.85rem; border-radius: 2px; margin-bottom: 1rem; background: rgba(0,0,0,0.5); text-align: left; }
+        .module-meta { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: #fff; margin-bottom: 0.5rem; }
+        .module-tag { font-size: 0.7rem; padding: 1px 6px; border: 1px solid var(--matrix-green); color: var(--matrix-green); }
+        .console-box { font-size: 0.8rem; color: #4ef037; background: #000; border: 1px solid #142e18; padding: 0.6rem; height: 55px; overflow-y: auto; white-space: pre-line; box-shadow: inset 0 0 8px rgba(0,0,0,0.9); }
+   
+        /* 🎯 बायां और दायां दोनों कॉलम हर हाल में अगल-बगल (Side-by-Side) और बराबर रखने के लिए */
+    .main-container {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .left-column, .right-column {
+        width: 50% !important;
+        max-width: 50% !important;
+        flex: 1 1 50% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- बायाँ कॉलम -->
+        <div class="left-column">
+            <div class="squad-panel">
+                <div class="panel-header">■ DATA FEED INGESTION CONSOLE</div>
+                <form method="POST" action="/dashboard" enctype="multipart/form-data">
+                    <div class="upload-zone" onclick="document.getElementById('realFileInput').click()">
+                        <h4 style="color:#fff; margin:0; font-size:0.95rem; letter-spacing:1px;">📁 DRAG OR CHOOSE FORENSIC TARGET</h4>
+                        <p id="uploadLabelText" style="color:var(--matrix-green); font-size:0.8rem; margin:6px 0 0 0;">
+                            {% if filename %}[ Selected: {{ filename }} ]{% else %}[ Awaiting system matrix file ]{% endif %}
+                        </p>
+                        <input type="file" id="realFileInput" name="file" style="display: none;" onchange="if(this.files.length) document.getElementById('uploadLabelText').innerText = '[ Selected: ' + this.files.name + ' ]';">
+                    </div>
+                    <div style="margin-top:1rem;">
+                        <button type="submit" class="gateway-btn" style="background:#4ef037;">RUN PIPELINE DIAGNOSTIC</button>
+                    </div>
+                </form>
+                <!-- 📷 🚨 LIVE WEBCAM FORENSIC SCANNER MODULE 🚨 📷 -->
+<div style="margin-top: 15px; border-top: 1px dashed #1f3322; padding-top: 15px; text-align: center;">
+    <button type="button" id="startCamBtn" style="width: 100%; background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; color: #00d4ff; padding: 10px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; letter-spacing: 1px; transition: all 0.3s ease;">
+        [ 📷 ACTIVATE LIVE WEBCAM SCANNER ]
+    </button>
+
+    <!-- कैमरा व्यूफ़ाइंडर (शुरुआत में छुपा रहेगा) -->
+    <div id="webcamContainer" style="display: none; margin-top: 12px; background: #03060c; border: 1px solid #00d4ff; border-radius: 6px; padding: 10px;">
+        <video id="liveWebcamVideo" autoplay playsinline style="width: 100%; max-height: 200px; border-radius: 4px; border: 1px solid #152538; object-fit: cover;"></video>
+        <canvas id="webcamCanvas" style="display: none;"></canvas>
+        
+        <div style="display: flex; gap: 6px; margin-top: 10px;">
+            <button type="button" id="captureSnapBtn" style="flex: 2; background: #4ef037; color: #000; border: none; padding: 10px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 0.7rem;">
+                ⚡ CAPTURE
+            </button>
+            <!-- 🔄 नया कैमरा स्विच बटन (Front <-> Back) -->
+            <button type="button" id="switchCamBtn" style="flex: 1.5; background: rgba(0, 212, 255, 0.2); color: #00d4ff; border: 1px solid #00d4ff; padding: 10px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 0.7rem;">
+                🔄 SWITCH
+            </button>
+            <button type="button" id="stopCamBtn" style="flex: 1; background: rgba(255, 51, 51, 0.2); color: #ff3333; border: 1px solid #ff3333; padding: 10px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 0.7rem;">
+                ✖️ STOP
+            </button>
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="squad-panel">
+                <div class="panel-header">■ SPATIAL WORKSPACE MATRIX MONITORS</div>
+                <div class="dual-monitors">
+                    <!-- 🖥️ ओरिजिनल इंटेल मॉनिटर -->
+                    <div class="monitor-box">
+                        <span>Original Intel Feed</span>
+                        <div class="display-feed">
+                            <div class="scan-laser"></div>
+                            {% if filename %}
+                                {% if is_video %}
+                                    <!-- 🚨 लाइव वीडियो स्ट्रीमिंग फ़ीड - बिना रुकावट लोड होने के लिए स्टाइल और टाइमस्टैम्प सिंक -->
+                                    <video src="/video_file_stream" autoplay muted loop controls playsinline style="width:100%; height:100%; object-fit:contain; border-radius:4px;"></video>
+                                {% else %}
+                                    <img src="data:image/png;base64,{{ file_base_64 }}" style="width:100%; height:100%; object-fit:contain;" alt="Input Image">
+                                {% endif %}
+                            {% else %}
+                                <span style="color:#224422; font-size:0.8rem;">[ AWAITING INPUT STREAM ]</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 🔥 लाइव एआई Anomaly हीटमैप मॉनिटर -->
+                    <div class="monitor-box">
+                        <span>Forensic Anomaly Core Heatmap</span>
+                        <div class="display-feed" style="border-color:#ff3333;">
+                            <div class="scan-laser" style="background:linear-gradient(180deg, rgba(255,51,51,0.7), transparent); box-shadow:0 0 8px var(--danger-red);"></div>
+                            {% if filename %}
+                                {% if is_video %}
+                                    <!-- 🚨 लाइव एआई हीटमैप स्ट्रीमिंग फ़ीड -->
+                                    <img src="/video_feed_heatmap" style="width:100% !important; height:100% !important; object-fit:contain !important; display:block !important; position:relative; z-index:2;" alt="Live AI Heatmap Feed">
+                                {% else %}
+                                    <img src="data:image/png;base64,{{ map_base64 }}" style="width:100%; height:100%; object-fit:contain;" alt="Heatmap Image">
+                                {% endif %}
+                            {% else %}
+                                <span style="color:#224422; font-size:0.8rem;">[ AWAITING ATTENTION MAP ]</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <div class="module-sub-panel" style="margin-top: 12px;">
+    <div class="module-meta">
+        <span>■ MODULE GAMMA (METADATA ANALYSIS)</span>
+        <span class="module-tag" style="border-color:#00ffff; color:#00ffff;">
+            {{ metadata.Status if metadata else "AWAITING TARGET" }}
+        </span>
+    </div>
+    <div class="console-box" style="height: 85px; color:#00ffff; border-color:rgba(0,255,255,0.2);">
+        [+] CAMERA MODEL : {{ metadata["Camera Model"] if metadata else "--" }}
+        [+] TIMESTAMP    : {{ metadata["Creation Date"] if metadata else "--" }}
+        [+] SOFTWARE TAG : {{ metadata["Software Used"] if metadata else "--" }}
+    </div>
+</div>
+</div>
+                <!-- दायाँ कॉलम -->
+        <div class="right-column">
+            <div class="squad-panel" id="compliancePanel">
+                <div class="panel-header">■ CRYPTOGRAPHIC COMPLIANCE HUB MONITOR</div>
+                
+                <div class="led-indicator-container">
+                    <div class="led-light" id="ledRed" title="Breach Detected"></div>
+                    <div class="led-light" id="ledYellow" title="Awaiting Feed"></div>
+                    <div class="led-light" id="ledGreen" title="System Protected"></div>
+                </div>
+                
+                <!-- 🏎‍🟀 🚨 असली घूमती हुई सुई वाला साइबर स्पीडोमीटर गेज 🚨 🏎‍🟀 -->
+                <!-- 🏎‍🟀 🚨 स्पीडोमीटर, 16 मैट्रिक्स लाइट्स और नीचे 3 कड़क फॉरेंसिक डिटेल्स (Metrics Row) 🚨 🏎‍🟀 -->
+<div class="compliance-master-panel" style="background: #060b13; border: 1px solid #101c2c; border-radius: 12px; padding: 15px; width: 100%; max-width: 440px; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.5); font-family: monospace;">
+    
+    <!-- हेडर मैट्रिक्स -->
+    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #152538; padding-bottom: 8px; margin-bottom: 12px;">
+        <div style="color: #647d93; font-size: 0.7rem; text-align: left; line-height: 1.2;">■ CRYPTOGRAPHIC<br><span style="color: #3b82f6; font-weight: bold;">● COMPLIANCE HUB MONITOR</span></div>
+        <div style="color: #647d93; font-size: 0.7rem; text-align: right; line-height: 1.2;">SYS-LOG: STABILIZED //<br><span id="statusLabelText" style="color: #4ef037; font-weight: bold;">THREAT LEVEL: CLEAN</span></div>
+    </div>
+
+    <!-- मुख्य फ्लेक्स कंटेनर: स्पीडोमीटर और लाइट्स को एक सीध में बराबर रखने के लिए -->
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
+        
+        <!-- 🪡 बाएं: असली सुई वाला स्पीडोमीटर आर्क गेज -->
+        <div style="position: relative; width: 180px; height: 130px; text-align: center; flex-shrink: 0; display: flex; justify-content: center;">
+            <svg width="170" height="110" viewBox="0 0 100 60" style="overflow: visible;">
+                <text x="6" y="53" fill="#647d93" font-size="4" text-anchor="middle">0</text>
+                <text x="12" y="27" fill="#647d93" font-size="4" text-anchor="middle">20</text>
+                <text x="35" y="11" fill="#647d93" font-size="4" text-anchor="middle">40</text>
+                <text x="65" y="11" fill="#647d93" font-size="4" text-anchor="middle">60</text>
+                <text x="88" y="27" fill="#647d93" font-size="4" text-anchor="middle">80</text>
+                <text x="94" y="53" fill="#647d93" font-size="4" text-anchor="middle">100</text>
+
+                <!-- रंगीन प्रोग्रेस आर्क -->
+                <path d="M 12 50 A 38 40 0 0 1 88 50" fill="none" stroke="#152538" stroke-width="6" stroke-linecap="round" />
+                <path d="M 12 50 A 38 40 0 0 1 40 20" fill="none" stroke="#ff3333" stroke-width="5" />
+                <path d="M 40 20 A 38 40 0 0 1 62 20" fill="none" stroke="#ffaa00" stroke-width="5" />
+                <path d="M 62 20 A 38 40 0 0 1 88 50" fill="none" stroke="#4ef037" stroke-width="5" stroke-linecap="round" />
+                
+                <!-- 🪡 सुई फिक्स: बिना किसी CSS झंझट के सीधे SVG से घूमेगी -->
+                <g id="needleGroup" transform="rotate(-90 50 50)">
+                    <line x1="50" y1="50" x2="50" y2="12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" style="filter: drop-shadow(0 0 5px #fff);" />
+                    <circle cx="50" cy="50" r="4" fill="#ffffff" stroke="#101c2c" stroke-width="1" />
+                </g>
+            </svg>
+
+            <!-- डिजिटल नियॉन डिस्प्ले -->
+            <div style="position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); text-align: center; width: 100%;">
+                <h1 id="radarGauge" style="margin: 0; font-size: 1.8rem; font-weight: bold; color: #ffffff; text-shadow: 0 0 12px rgba(255,255,255,0.3); line-height: 1;">--%</h1>
+                <span style="font-size: 0.5rem; color: #647d93; letter-spacing: 0.5px; font-weight: bold; display: block; margin-top: 2px;">INTEGRITY INDEX</span>
+            </div>
+        </div>
+
+        <!-- 🟢 🔴 दाएं: 16 मैट्रिक्स नियॉन लाइट्स (M1 से M16) -->
+        <div style="flex-grow: 1; max-width: 220px;">
+            <div style="color: #647d93; font-size: 0.55rem; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: bold; text-align: center;">FORENSIC MATRIX LED ARRAY DEVIATIONS</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #03060c; border: 1px solid #0d1520; border-radius: 8px; padding: 10px;">
+                {% for i in range(1, 17) %}
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px; border: 1px solid #0f1824; border-radius: 4px; background: #050912;">
+                    <div class="matrix-led" id="ledM{{ i }}" style="width: 6px; height: 6px; border-radius: 50%; background: #1a1f1a; margin-bottom: 4px; transition: all 0.3s ease;"></div>
+                    <span style="color: #405566; font-size: 0.5rem; font-weight: bold;">M{{ i }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 📊 🚨 भाई की डिमांड पर जोड़ी गई 3 कड़क फॉरेंसिक डिटेल्स की पट्टी (Metrics Array) 🚨 📊 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #03060c; border: 1px solid #0d1520; border-radius: 8px; padding: 12px; text-align: center; margin-top: 12px;">
+        <div style="flex: 1;">
+            <div style="color: #647d93; font-size: 0.55rem; font-weight: bold; margin-bottom: 2px;">INTEGRITY RAW</div>
+            <div id="metricIntegrity" style="font-size: 1rem; font-weight: bold; color: #ffffff;">--%</div>
+        </div>
+        <div style="width: 1px; height: 22px; background: #152538;"></div>
+        <div style="flex: 1;">
+            <div style="color: #647d93; font-size: 0.55rem; font-weight: bold; margin-bottom: 2px;">AI PROBABILITY</div>
+            <div id="metricAI" style="font-size: 1rem; font-weight: bold; color: #ffffff;">--%</div>
+        </div>
+        <div style="width: 1px; height: 22px; background: #152538;"></div>
+        <div style="flex: 1;">
+            <div style="color: #647d93; font-size: 0.55rem; font-weight: bold; margin-bottom: 2px;">SIGNAL ATTEN</div>
+            <div id="metricSignal" style="font-size: 1rem; font-weight: bold; color: #ffffff;">-- dB</div>
+        </div>
+    </div>
+
+    <!-- बॉटम स्टेटस अलर्ट बॉक्स -->
+    <div id="compliancePanel" style="margin-top: 12px; background: rgba(13,21,32,0.5); border: 1px solid #152538; border-radius: 6px; padding: 10px; text-align: center; transition: all 0.5s ease;">
+        <div id="badgeAlpha" style="color: #4ef037; font-size: 0.75rem; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">STATUS: VERIFIED SECURE / PRISTINE ORIGINAL</div>
+    </div>
+</div>
+
+<!-- 🚨 कड़क नियॉन ब्लिंकिंग इफ़ेक्ट CSS -->
+<style>
+    @keyframes super-blink {
+        0%, 100% { opacity: 1; transform: scale(1.15); }
+        50% { opacity: 0.2; transform: scale(0.85); }
+    }
+    .led-glow-green { 
+        background-color: #4ef037 !important; 
+        box-shadow: 0 0 15px #4ef037, 0 0 5px #4ef037 !important; 
+        animation: super-blink 0.7s infinite ease-in-out !important; 
+    }
+    .led-glow-red { 
+        background-color: #ff3333 !important; 
+        box-shadow: 0 0 15px #ff3333, 0 0 5px #ff3333 !important; 
+        animation: super-blink 0.4s infinite ease-in-out !important; 
+    }
+    .led-glow-yellow { 
+        background-color: #ffaa00 !important; 
+        box-shadow: 0 0 15px #ffaa00, 0 0 5px #ffaa00 !important; 
+        animation: super-blink 0.6s infinite ease-in-out !important; 
+    }
+    
+</style>
+                <div class="threat-bar-container">
+                    <div class="threat-bar" id="threatBarActive"></div>
+                </div>
+                
+                <div class="module-sub-panel">
+                    <div class="module-meta">
+                        <span>■ MODULE ALPHA (FORENSIC LOGS)</span>
+                        <span class="module-tag" id="tagAlpha">NO FEED</span>
+                    </div>
+                    <!-- 🖥️ MODULE ALPHA (FORENSIC LOGS) का लाइव डिब्बा -->
+                <div class="console-box" id="liveConsoleAlpha" style="height: 100px; overflow-y: auto;">
+                    {% if alpha_logs %}
+                        {% for log in alpha_logs %}
+                            <div style="margin-bottom: 4px;">{{ log }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="color: #224422;">[SYS-LOG]: Core matrix stack uninitialized...</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="module-sub-panel">
+                <div class="module-meta">
+                    <span>■ MODULE BETA (SQLITE3 REGISTER)</span>
+                    <span class="module-tag" id="tagBeta">NO FEED</span>
+                </div>
+                <!-- 🖥️ MODULE BETA (MYSQL REGISTER) का लाइव डिब्बा -->
+                <div class="console-box" id="liveConsoleBeta" style="height: 100px; overflow-y: auto;">
+                    {% if beta_logs %}
+                        {% for log in beta_logs %}
+                            <div style="margin-bottom: 4px;">{{ log }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="color: #224422;">[SYS-LOG]: SQLite3 history logger idle...</div>
+                    {% endif %}
+                </div>
+
+                
+                
+                {% if filename %}
+                <div style="margin-top: 1rem; display:flex; gap:1rem;">
+                    <a href="/download-report?file={{ filename }}&score={{ trust_score }}" class="gateway-btn" style="flex:1; text-decoration:none; padding:0.65rem 0; font-size:0.8rem; text-align:center;">EXPORT REPORT</a>
+                    <a href="/wipe-history" class="gateway-btn" style="flex:1; background:var(--danger-red); color:#fff; text-decoration:none; padding:0.65rem 0; font-size:0.8rem; text-align:center;">WIPE HISTORY</a>
+                </div>
+                {% endif %}
+            </div>
+            
+          
+    </div>
+    <script>
+    // 🚨 वेरिएबल्स को फेच करना
+    const score = parseInt("{{ trust_score }}") || 0;
+    const filename = "{{ filename }}";
+    
+    const consoleAlpha = document.getElementById('liveConsoleAlpha');
+    const consoleBeta = document.getElementById('liveConsoleBeta');
+    const badge = document.getElementById('badgeAlpha');
+    const panel = document.getElementById('compliancePanel');
+    const gauge = document.getElementById('radarGauge');
+    const tagA = document.getElementById('tagAlpha');
+    const tagB = document.getElementById('tagBeta');
+    const needleGroup = document.getElementById('needleGroup');
+    const statusLabelText = document.getElementById('statusLabelText');
+    
+    const metricIntegrity = document.getElementById('metricIntegrity');
+    const metricAI = document.getElementById('metricAI');
+    const metricSignal = document.getElementById('metricSignal');
+
+    const ledRed = document.getElementById('ledRed');
+    const ledYellow = document.getElementById('ledYellow');
+    const ledGreen = document.getElementById('ledGreen');
+
+    // 🔊 1. असली सायरन अलार्म साउंड जनरेटर (Red Alert - सुरक्षित ट्राई-कैच ब्लॉक)
+    function playRedAlertAlarm() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            let duration = 3.0;
+            let osc1 = audioCtx.createOscillator();
+            let osc2 = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc1.type = 'sawtooth'; osc2.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc2.frequency.setValueAtTime(304, audioCtx.currentTime);
+            for (let i = 0; i < duration; i += 0.8) {
+                osc1.frequency.linearRampToValueAtTime(650, audioCtx.currentTime + i + 0.4);
+                osc1.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + i + 0.8);
+                osc2.frequency.linearRampToValueAtTime(654, audioCtx.currentTime + i + 0.4);
+                osc2.frequency.linearRampToValueAtTime(304, audioCtx.currentTime + i + 0.8);
+            }
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc1.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+            osc1.start(); osc2.start();
+            osc1.stop(audioCtx.currentTime + duration); osc2.stop(audioCtx.currentTime + duration);
+        } catch(e) { console.log("Audio blocked by browser safety policy."); }
+    }
+
+    // 🗣️ 2. हैकर्स रोबोटिक वॉइस स्पीच इंजन (पूरी तरह सुरक्षित फॉलबैक के साथ)
+    function speakHacker(text, isThreat = false) {
+        try {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // पुराना अटका हुआ भाषण साफ़ करें
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.rate = 1.0; msg.pitch = 0.8;
+                msg.onend = function() { if (isThreat) { playRedAlertAlarm(); } };
+                window.speechSynthesis.speak(msg);
+            }
+        } catch(e) { 
+            console.log("Speech blocked by browser safety policy.");
+            if (isThreat) { playRedAlertAlarm(); }
+        }
+    }
+
+    // 💡 स्थिति A: शुरुआत में (फ्रेश लॉगिन मोड - डिफ़ॉल्ट डार्क मैट्रिक्स थीम)
+    if (!filename || filename === "" || filename === "None") {
+        if(gauge) gauge.innerText = "--%"; 
+        if(needleGroup) needleGroup.style.transform = "rotate(-90deg)"; 
+        if(badge) { badge.innerText = "STATUS: AWAITING MATRIX TARGET..."; badge.style.color = "#ffaa00"; }
+        
+        if(metricIntegrity) metricIntegrity.innerText = "--%";
+        if(metricAI) metricAI.innerText = "--%";
+        if(metricSignal) metricSignal.innerText = "-- dB";
+
+        // शुरुआत में सभी 16 मैट्रिक्स लाइट्स को ऑफ (डार्क ग्रीन) रखना भाई
+        for(let i=1; i<=16; i++) {
+            let mLed = document.getElementById('ledM' + i);
+            if(mLed) mLed.className = "matrix-led";
+        }
+    }
+
+    // 💡 स्थिति B: जब फ़ाइल सफलतापूर्वक अपलोड होकर प्रेडिक्शन डेटा आ जाए
+    if (filename && filename !== "" && filename !== "None") {
+        if(consoleAlpha) consoleAlpha.innerHTML = "";
+        if(consoleBeta) consoleBeta.innerHTML = "";
+        // 🚨 ऊपर वाली 3 मुख्य बत्तियों (लाल, पीली, हरी) को ज़बरदस्त ब्लिंक कराने का सीधा आदेश
+        if (score >= 85) {
+            if(ledGreen) ledGreen.className = "led-light led-glow-green";
+            if(ledYellow) ledYellow.className = "led-light";
+            if(ledRed) ledRed.className = "led-light";
+            setTimeout(() => { speakHacker("Verification Successful. Secure pass.", false); }, 500);
+        } 
+        else if (score >= 40 && score < 85) {
+            if(ledYellow) ledYellow.className = "led-light led-glow-yellow";
+            if(ledRed) ledRed.className = "led-light";
+            if(ledGreen) ledGreen.className = "led-light";
+            setTimeout(() => { speakHacker("Warning. Pixel modification detected.", false); }, 500);
+        } 
+        else {
+            if(ledRed) ledRed.className = "led-light led-glow-red";
+            if(ledYellow) ledYellow.className = "led-light";
+            if(ledGreen) ledGreen.className = "led-light";
+            setTimeout(() => { speakHacker("Warning! Threat Detected! Forgery profile matched.", true); }, 500);
+        }
+        
+        speakHacker("Cyber Forensic Matrix Scan Initiated...", false);
+        
+        // 🏎‍🟀 🚨 असली स्मूथ सुई रोटेशन एनीमेशन (0% से असली स्कोर तक धीरे-धीरे घूम कर जाएगा!)
+        const targetRotation = -90 + (score * 1.8);
+        let currentRot = -90;
+        if (needleGroup) {
+            const needleTimer = setInterval(() => {
+                if (currentRot < targetRotation) {
+                    currentRot += 3;
+                    if (currentRot > targetRotation) currentRot = targetRotation;
+                    needleGroup.setAttribute("transform", 'rotate(${currentRot} 50 50)');
+                } else {
+                    clearInterval(needleTimer);
+                }
+            }, 15);
+        }
+        if(gauge) gauge.innerText = score + "%";
+
+        // 🚨 🧠 आपके phpMyAdmin डेटाबेस से आने वाले असली कस्टमाइज्ड बीटा लॉग्स 🚨
+        let logsAlpha = [];
+        let logsBeta = [
+            "[MYSQL_SERVER]: Node connection successfully bound at port 3306.",
+            "[MYSQL_QUERY]: Fetching recent transactional history trails...",
+            "[MYSQL_AUDIT]: Row committed -> File archived in upload history table.",
+            "[MYSQL_SUCCESS]: Token secure ledger synchronization finalized."
+        ];
+        
+        // 📊 चार कंडीशंस के आधार पर 16 मैट्रिक्स लाइट्स का कड़क नियॉन स्विचिंग लॉजिक:
+        if (score >= 85) {
+            if(badge) badge.innerText = "STATUS: VERIFIED SECURE / PRISTINE ORIGINAL";
+            if(badge) badge.style.color = "#4ef037";
+            if(panel) panel.style.borderColor = "#4ef037";
+            if(statusLabelText) { statusLabelText.innerText = "THREAT LEVEL: CLEAN"; statusLabelText.style.color = "#4ef037"; }
+            
+            if(metricIntegrity) metricIntegrity.innerText = score + ".0%";
+            if(metricAI) metricAI.innerText = (100 - score) + ".0%";
+            if(metricSignal) metricSignal.innerText = "2.0 dB";
+
+            // 🟢 सभी 16 नियॉन लाइट्स को एक साथ हरी नियॉन बत्ती (Blink) बनाना भाई
+            for(let i=1; i<=16; i++) {
+                let mLed = document.getElementById('ledM' + i);
+                if(mLed) mLed.className = "matrix-led led-glow-green";
+            }
+            
+            if(tagA) { tagA.innerText = "SECURE"; }
+            logsAlpha = ["[BOOT]: Payload analysis complete...","[INFO]: No localized pixel anomalies discovered.","[SUCCESS]: Vector authenticity 100% verified."];
+            
+            setTimeout(() => { speakHacker("Verification Successful. Secure pass.", false); }, 500);
+        } 
+        else if (score >= 40 && score < 85) {
+            if(badge) badge.innerText = "STATUS: ALTERATION DETECTED / WARNING";
+            if(badge) badge.style.color = "#ffaa00";
+            if(panel) panel.style.borderColor = "#ffaa00";
+            if(statusLabelText) { statusLabelText.innerText = "THREAT LEVEL: SUSPECT"; statusLabelText.style.color = "#ffaa00"; }
+            
+            if(metricIntegrity) metricIntegrity.innerText = score + ".0%";
+            if(metricAI) metricAI.innerText = "4.0%";
+            if(metricSignal) metricSignal.innerText = "6.5 dB";
+
+            // 🟡 सभी 16 नियॉन लाइट्स को एक साथ पीली नियॉन बत्ती (Blink) बनाना भाई
+            for(let i=1; i<=16; i++) {
+                let mLed = document.getElementById('ledM' + i);
+                if(mLed) mLed.className = "matrix-led led-glow-yellow";
+            }
+            
+            if(tagA) { tagA.innerText = "MODIFIED"; }
+            logsAlpha = ["[BOOT]: Target payload loaded.","[ALERT]: High error variance detected via ELA algorithm.","[WARNING]: Localized pixel compression mismatch found."];
+            
+            setTimeout(() => { speakHacker("Warning. Pixel modification detected.", false); }, 500);
+        }
+        else {
+            if(badge) badge.innerText = (score < 25) ? "STATUS: CRITICAL THREAT / COMPROMISED" : "STATUS: SYNTHETIC AI TEMPLATE MATCHED";
+            if(badge) badge.style.color = "#ff3333";
+            if(panel) panel.style.borderColor = "#ff3333";
+            if(statusLabelText) { statusLabelText.innerText = "THREAT LEVEL: DANGER"; statusLabelText.style.color = "#ff3333"; }
+            
+            if(metricIntegrity) metricIntegrity.innerText = score + ".0%";
+            if(metricAI) metricAI.innerText = (100 - score) + ".0%";
+            if(metricSignal) metricSignal.innerText = "12.0 dB";
+
+            // 🔴 ख़तरा होने पर सभी 16 नियॉन लाइट्स को एक साथ लाल (Red Flash) बनाना भाई
+            for(let i=1; i<=16; i++) {
+                let mLed = document.getElementById('ledM' + i);
+                if(mLed) mLed.className = "matrix-led led-glow-red";
+            }
+            
+            if(tagA) { tagA.innerText = "AI TARGET"; }
+            logsAlpha = ["[BOOT]: Neural vector array mapped.","[ALERT]: Laplacian synthetic noise signature discovered.","[CRITICAL]: Generative Adversarial Network template matched."];
+            
+            setTimeout(() => { speakHacker("Warning! Threat Detected! Forgery profile matched.", true); }, 500);
+        }
+
+        if(tagB) { tagB.innerText = "SYNCED"; }
+
+        // ⌨️ 1. मॉड्यूल अल्फा (Forensic Logs) का रीयल-टाइम टाइपराइटर
+        let aIdx = 0;
+        function streamAlpha() {
+            if (aIdx < logsAlpha.length) {
+                if(consoleAlpha) { consoleAlpha.innerHTML += logsAlpha[aIdx] + "\n"; consoleAlpha.scrollTop = consoleAlpha.scrollHeight; }
+                aIdx++; setTimeout(streamAlpha, 400);
+            }
+        }
+        streamAlpha();
+
+        // ⌨️ 2. 🚨 महा-फिक्स: मॉड्यूल बीटा (MySQL Register Logs) का रीयल-टाइम टाइपराइटर (जो मिसिंग था) 🚨
+        let bIdx = 0;
+        function streamBeta() {
+            if (bIdx < logsBeta.length) {
+                if(consoleBeta) { consoleBeta.innerHTML += logsBeta[bIdx] + "\n"; consoleBeta.scrollTop = consoleBeta.scrollHeight; }
+                bIdx++; setTimeout(streamBeta, 450);
+            }
+        }
+        setTimeout(streamBeta, 600); // अल्फा के शुरू होने के थोड़ी देर बाद बीटा दौड़ना चालू करेगा
+    }
+    // 📷 🚨 LIVE WEBCAM (BACK CAMERA DEFAULT + FRONT/BACK SWITCH ENGINE) 🚨 📷
+    const startCamBtn = document.getElementById('startCamBtn');
+    const stopCamBtn = document.getElementById('stopCamBtn');
+    const switchCamBtn = document.getElementById('switchCamBtn');
+    const captureSnapBtn = document.getElementById('captureSnapBtn');
+    const webcamContainer = document.getElementById('webcamContainer');
+    const liveWebcamVideo = document.getElementById('liveWebcamVideo');
+    const webcamCanvas = document.getElementById('webcamCanvas');
+    
+    let camStream = null;
+    let currentFacingMode = "environment"; // 🎯 'environment' का मतलब मोबाइल का बैक (Rear) कैमरा होता है!
+
+    // कैमरा चालू करने का स्मार्ट फ़ंक्शन
+    async function startCameraStream(facingMode) {
+        if (camStream) {
+            camStream.getTracks().forEach(track => track.stop());
+        }
+        try {
+            // मोबाइल में बैक कैमरा और लैपटॉप में उपलब्ध वेबकैम चालू करेगा
+            camStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: facingMode }, 
+                audio: false 
+            });
+            liveWebcamVideo.srcObject = camStream;
+            webcamContainer.style.display = 'block';
+            startCamBtn.style.display = 'none';
+        } catch (err) {
+            // यदि लैपटॉप पर 'environment' न मिले, तो सामान्य कैमरा चालू करें
+            try {
+                camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                liveWebcamVideo.srcObject = camStream;
+                webcamContainer.style.display = 'block';
+                startCamBtn.style.display = 'none';
+            } catch (fallbackErr) {
+                alert("⚠️ Camera Access Denied or No Camera Found!");
+            }
+        }
+    }
+
+    // 1. मुख्य बटन दबाने पर सीधा बैक कैमरा खुलेगा
+    if (startCamBtn) {
+        startCamBtn.addEventListener('click', () => {
+            currentFacingMode = "environment";
+            startCameraStream(currentFacingMode);
+        });
+    }
+
+    // 2. 🔄 SWITCH बटन दबाने पर Front और Back कैमरा आपस में बदलेंगे
+    if (switchCamBtn) {
+        switchCamBtn.addEventListener('click', () => {
+            currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+            startCameraStream(currentFacingMode);
+        });
+    }
+
+    // 3. STOP बटन दबाने पर कैमरा बंद होगा
+    if (stopCamBtn) {
+        stopCamBtn.addEventListener('click', () => {
+            if (camStream) {
+                camStream.getTracks().forEach(track => track.stop());
+            }
+            webcamContainer.style.display = 'none';
+            startCamBtn.style.display = 'block';
+        });
+    }
+
+    // 4. CAPTURE बटन दबाने पर लाइव फ़ोटो खींचकर सीधे सर्वर को भेजेगा
+    if (captureSnapBtn) {
+        captureSnapBtn.addEventListener('click', () => {
+            if (!camStream) return;
+            
+            webcamCanvas.width = liveWebcamVideo.videoWidth;
+            webcamCanvas.height = liveWebcamVideo.videoHeight;
+            const ctx = webcamCanvas.getContext('2d');
+            ctx.drawImage(liveWebcamVideo, 0, 0, webcamCanvas.width, webcamCanvas.height);
+            
+            camStream.getTracks().forEach(track => track.stop());
+            
+            webcamCanvas.toBlob((blob) => {
+                const liveFile = new File([blob], "live_mobile_cam_capture.jpg", { type: "image/jpeg" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(liveFile);
+                
+                const fileInput = document.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.files = dataTransfer.files;
+                    const uploadForm = fileInput.closest('form');
+                    if (uploadForm) {
+                        uploadForm.submit();
+                    }
+                }
+            }, 'image/jpeg', 0.95);
+        });
+    }
+</script>
+</body>
+</html>

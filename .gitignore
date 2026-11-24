@@ -1,0 +1,14 @@
+﻿uploads/
+static/uploads/
+_pycache_/
+*.mp4
+*.avi
+*.mov
+*.jpg
+*.jpeg
+*.png
+*.pdf
+*.docx
+*.pptx
+*.db
+*.zip
