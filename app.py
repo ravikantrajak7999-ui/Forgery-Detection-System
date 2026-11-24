@@ -10,8 +10,7 @@ from PIL.ExifTags import TAGS
 from flask import Flask, render_template, request, redirect, url_for, Response, session, make_response
 import mysql.connector
 import hashlib
-import sqlite3
-from authlib.integrations.flask_client import OAuth
+
 
 def get_db_connection():
     return mysql.connector.connect(
@@ -26,15 +25,7 @@ template_dir = os.path.join(base_dir, 'templates')
 
 app = Flask(__name__, template_folder=template_dir)
 app.secret_key = 'cyber_secure_secret_node_key'
-# 🌐 Google OAuth 2.0 सेटअप (Google Cloud Console से मिली ID और Secret यहाँ डालें)
-oauth = OAuth(app)
-google = oauth.register(
-    name='google',
-    client_id=os.environ.get("GOOGLE_CLIENT_ID", "YOUR_GOOGLE_CLIENT_ID"),
-    client_secret=os.environ.get("GOOGLE_CLIENT_SECRET", "YOUR_GOOGLE_CLIENT_SECRET"),
-    server_metadata_url='https://google.com',
-    client_kwargs={'scope': 'openid email profile'}
-)
+
 
 def init_users_db():
     conn = sqlite3.connect('users_vault.db')
@@ -47,7 +38,7 @@ def init_users_db():
             password_hash TEXT NOT NULL,
             recovery_pin TEXT NOT NULL,
             role TEXT DEFAULT 'Analyst',
-            is_approved INTEGER DEFAULT 0
+            is_approved INTEGER DEFAULT 1
         )
     ''')
     admin_hash = hashlib.sha256("admin123".encode()).hexdigest()
@@ -59,8 +50,6 @@ def init_users_db():
     conn.close()
 
 init_users_db()
-
-
 UPLOAD_FOLDER = os.path.join(base_dir, 'uploads')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
