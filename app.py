@@ -69,7 +69,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 CURRENT_VIDEO_PATH = None
 TRUST_SCORE_GLOBAL = 100
-
 ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 ALLOWED_DOC_EXTENSIONS = {'pdf', 'txt', 'docx', 'pptx'}
 ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv'}
@@ -249,8 +248,7 @@ def login():
 
             if account:
                 full_name, email, role, is_approved = account
-                if is_approved == 0:
-                    return render_template('login.html', error="🔒 Access Pending: Admin (Ravikant) has not approved your account yet!")
+                
                 session['logged_in'] = True
                 session['session_user'] = full_name
                 session['username'] = full_name
