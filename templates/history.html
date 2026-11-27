@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit History | FORENSIC AI GUARD</title>
+    <style>
+        :root {
+            --bg-dark: #03070c;
+            --card-bg: #08121e;
+            --accent-cyan: #00f2fe;
+            --accent-green: #4ef037;
+            --danger-red: #ff3333;
+            --warning-yellow: #ffcc00;
+            --border-color: #162a42;
+            --text-muted: #8aa4c0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        /* Top SaaS Navigation Bar */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.85rem 4%;
+            background: rgba(8, 18, 30, 0.96);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.8px;
+        }
+        .brand span { color: var(--accent-cyan); }
+        .nav-links { display: flex; gap: 8px; align-items: center; }
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 242, 254, 0.12);
+            color: var(--accent-cyan);
+        }
+        .user-controls { display: flex; align-items: center; gap: 12px; }
+        .profile-pill {
+            background: rgba(78, 240, 55, 0.1);
+            border: 1px solid rgba(78, 240, 55, 0.3);
+            color: var(--accent-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .signout-btn {
+            background: rgba(255, 51, 51, 0.15);
+            border: 1px solid var(--danger-red);
+            color: #ff6666;
+            padding: 5px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .signout-btn:hover { background: var(--danger-red); color: #fff; }
+
+        .container { max-width: 1150px; margin: 2rem auto; padding: 0 4%; }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .section-header h2 { font-size: 1.3rem; color: var(--accent-cyan); }
+        .export-btn {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #03070c;
+            padding: 0.5rem 1.1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .table-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow-x: auto;
+            margin-bottom: 2.5rem;
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+        th, td { padding: 0.85rem 1rem; border-bottom: 1px solid #122338; }
+        th { background: #050c14; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.6px; }
+        tr:hover { background: rgba(0, 242, 254, 0.03); }
+        .badge-safe { color: var(--accent-green); font-weight: 700; }
+        .badge-warn { color: var(--warning-yellow); font-weight: 700; }
+        .badge-danger { color: var(--danger-red); font-weight: 700; }
+    </style>
+</head>
+<body>
+    <nav class="top-navbar">
+       <a href="/" class="brand" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:800; font-size:1.2rem; letter-spacing:0.8px;">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://w3.org">
+        <defs>
+            <linearGradient id="cyberGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00f2fe"/>
+                <stop offset="100%" stop-color="#4ef037"/>
+            </linearGradient>
+        </defs>
+        <path d="M20 3L6 9V19C6 28.2 11.9 36.6 20 39C28.1 36.6 34 28.2 34 19V9L20 3Z" fill="rgba(0, 242, 254, 0.12)" stroke="url(#cyberGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="20" cy="20" r="6" stroke="#00f2fe" stroke-width="2"/>
+        <circle cx="20" cy="20" r="2.2" fill="#4ef037"/>
+        <line x1="11" y1="20" x2="14" y2="20" stroke="#4ef037" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="20" x2="29" y2="20" stroke="#4ef037" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>FORENSIC <span style="color:#00f2fe;">AI GUARD</span></span>
+</a>
+        <div class="nav-links">
+            <a href="/" class="nav-link">🏠 Home</a>
+            <a href="/dashboard" class="nav-link">🔍 Scanner Dashboard</a>
+            <a href="/history" class="nav-link active">📊 Audit History</a>
+        </div>
+        <div class="user-controls">
+            <span class="profile-pill">👤 {{ session.get('username', 'Analyst') }} ({{ session.get('session_role', 'Analyst') }})</span>
+            <a href="/logout" class="signout-btn">🚪 Sign Out</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section-header">
+            <h2>📊 Forensic Scan Audit Ledger</h2>
+            <a href="/download-report" class="export-btn">⬇️ Download Consolidated Report</a>
+        </div>
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Timestamp</th>
+                        <th>Operator</th>
+                        <th>Target Filename</th>
+                        <th>Type</th>
+                        <th>Trust Score</th>
+                        <th>Verdict Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if scans %}
+                        {% for s in scans %}
+                        <tr>
+                            <td>#{{ s.id }}</td>
+                            <td>{{ s.timestamp }}</td>
+                            <td>{{ s.user_name }}</td>
+                            <td>{{ s.filename }}</td>
+                            <td>{{ s.file_type }}</td>
+                            <td>
+                                {% if s.score >= 85 %}
+                                    <span class="badge-safe">{{ s.score }}%</span>
+                                {% elif s.score >= 40 %}
+                                    <span class="badge-warn">{{ s.score }}%</span>
+                                {% else %}
+                                    <span class="badge-danger">{{ s.score }}%</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if s.score >= 85 %}
+                                    <span class="badge-safe">● VERIFIED AUTHENTIC</span>
+                                {% elif s.score >= 40 %}
+                                    <span class="badge-warn">▲ ALTERATION DETECTED</span>
+                                {% else %}
+                                    <span class="badge-danger">✖️ CRITICAL FORGERY / AI</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="7" style="text-align:center; color:#8aa4c0; padding:1.5rem;">No scan records found yet. Run a scan from the Dashboard!</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-header">
+            <h2>🔐 Registered Analysts & Biometric Vault</h2>
+        </div>
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Full Name</th>
+                        <th>Email Address</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>#{{ u }}</td>
+                        <td>{{ u }}</td>
+                        <td>{{ u }}</td>
+                        <td><span class="badge-safe">{{ u }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

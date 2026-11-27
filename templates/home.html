@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORENSIC AI GUARD | Developed by Ravikant Rajak</title>
+    <style>
+        :root {
+            --bg-dark: #03070c;
+            --card-bg: #08121e;
+            --accent-cyan: #00f2fe;
+            --accent-green: #4ef037;
+            --accent-purple: #a855f7;
+            --border-color: #162a42;
+            --text-muted: #8aa4c0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.06), transparent 40%),
+                              radial-gradient(circle at 80% 80%, rgba(78, 240, 55, 0.05), transparent 40%);
+        }
+        /* Top Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(8, 18, 30, 0.94);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .brand span { color: var(--accent-cyan); }
+        .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .btn-outline {
+            padding: 0.5rem 1.1rem;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: 0.25s;
+        }
+        .btn-outline:hover { background: rgba(0, 242, 254, 0.12); }
+        .btn-primary {
+            padding: 0.52rem 1.25rem;
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            color: #03070c;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.88rem;
+            transition: 0.25s;
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(0, 242, 254, 0.35); }
+
+        /* Hero & Welcome Banner */
+        .hero {
+            text-align: center;
+            padding: 3.5rem 5% 2rem;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+        .welcome-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(78, 240, 55, 0.1);
+            border: 1px solid rgba(78, 240, 55, 0.35);
+            color: var(--accent-green);
+            border-radius: 25px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+        }
+        .hero h1 {
+            font-size: 2.6rem;
+            line-height: 1.2;
+            margin-bottom: 1.1rem;
+            background: linear-gradient(90deg, #ffffff, #a5d8ff);
+            -webkit-background-clip: text;
+            background-clip: text; /* <-- बस यह नई लाइन जोड़ दें */
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .hero-cta { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .hero-cta .btn-primary, .hero-cta .btn-outline { padding: 0.8rem 1.7rem; font-size: 0.96rem; }
+
+        /* Section Titles */
+        .section-title {
+            max-width: 1180px;
+            margin: 1.8rem auto 0.4rem;
+            padding: 0 5%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .section-title h2 { font-size: 1.25rem; color: #fff; letter-spacing: 0.5px; }
+        .section-title span { font-size: 0.78rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.8px; }
+
+        /* Grid Containers */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.3rem;
+            padding: 1rem 5% 2rem;
+            max-width: 1180px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Active Module Cards (Clickable) */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.4rem;
+            transition: 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover { border-color: var(--accent-cyan); transform: translateY(-4px); box-shadow: 0 6px 24px rgba(0, 242, 254, 0.12); }
+        .card-icon { font-size: 1.7rem; margin-bottom: 0.7rem; }
+        .card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; color: #fff; }
+        .card p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+        .card-link { display: inline-block; margin-top: 12px; color: var(--accent-cyan); font-size: 0.82rem; font-weight: 600; }
+
+        /* Future Scope Cards */
+        .future-card {
+            background: rgba(11, 18, 34, 0.88);
+            border: 1px dashed rgba(168, 85, 247, 0.45);
+            border-radius: 10px;
+            padding: 1.4rem;
+            transition: 0.3s;
+        }
+        .future-card:hover { border-color: #c084fc; transform: translateY(-3px); }
+        .future-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #d8b4fe;
+            background: rgba(168, 85, 247, 0.16);
+            padding: 3px 9px;
+            border-radius: 4px;
+            margin-bottom: 0.65rem;
+        }
+        .future-card h3 { font-size: 1.05rem; margin-bottom: 0.5rem; color: #f3e8ff; }
+        .future-card p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 1.3rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="brand" style="display:inline-flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:800; font-size:1.2rem; letter-spacing:0.8px;">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://w3.org">
+        <defs>
+            <linearGradient id="cyberGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00f2fe"/>
+                <stop offset="100%" stop-color="#4ef037"/>
+            </linearGradient>
+        </defs>
+        <path d="M20 3L6 9V19C6 28.2 11.9 36.6 20 39C28.1 36.6 34 28.2 34 19V9L20 3Z" fill="rgba(0, 242, 254, 0.12)" stroke="url(#cyberGrad)" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="20" cy="20" r="6" stroke="#00f2fe" stroke-width="2"/>
+        <circle cx="20" cy="20" r="2.2" fill="#4ef037"/>
+        <line x1="11" y1="20" x2="14" y2="20" stroke="#4ef037" stroke-width="2" stroke-linecap="round"/>
+        <line x1="26" y1="20" x2="29" y2="20" stroke="#4ef037" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span>FORENSIC <span style="color:#00f2fe;">AI GUARD</span></span>
+</a>
+        <div class="nav-actions">
+            {% if session.get('logged_in') %}
+                <span style="color: #8aa4c0; font-size: 0.85rem;">👤 {{ session.get('username') }}</span>
+                <a href="/dashboard" class="btn-primary">Dashboard →</a>
+                <a href="/logout" class="btn-outline" style="border-color:#ff4d4d; color:#ff4d4d;">Sign Out</a>
+            {% else %}
+                <a href="/login" class="btn-outline">Sign In</a>
+                <a href="/login?mode=register" class="btn-primary">Create Account</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- 👋 WELCOME HERO SECTION -->
+    <section class="hero">
+        <div style="font-size: 0.95rem; color: #4ef037; letter-spacing: 3px; font-weight: bold; margin-bottom: 10px;">
+            ● SYSTEM ONLINE & READY
+        </div>
+        <h1 style="font-size: 3rem; margin-bottom: 12px;">
+            WELCOME TO FORENSIC AI GUARD
+        </h1>
+        <div class="welcome-banner" style="font-size: 0.95rem; margin-bottom: 1.4rem;">
+         {% if session.get('logged_in') %}
+             👋 Welcome back, <strong>{{ session.get('username') }}</strong> — Security Clearance: Active
+         {% else %}
+             🛡️ Next-Gen Multi-Modal Digital Media & Document Verification
+         {% endif %}
+     </div>
+        <p>
+            A unified multi-modal cyber forensic platform powered by Error Level Analysis (ELA), Laplacian Variance, Spectral Audio Forensics, Spatial Attention Heatmaps, and Keystroke Biometric Security.
+        </p>
+        <div class="hero-cta">
+            {% if session.get('logged_in') %}
+                <a href="/dashboard" class="btn-primary">🚀 Launch Forensic Scanner</a>
+                <a href="/history" class="btn-outline">📊 View Audit History</a>
+            {% else %}
+                <a href="/login" class="btn-primary">🔐 Sign In to Workspace</a>
+                <a href="/login?mode=register" class="btn-outline">✨ Register Analyst Account</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ⚡ 5 CORE FORENSIC MODULES (INCLUDING AUDIO BOX) -->
+    <div class="section-title">
+        <h2>⚡ Active Forensic Verification Modules</h2>
+        <span>CLICK ANY MODULE TO LAUNCH</span>
+    </div>
+    <section class="grid-container">
+        <a href="/dashboard" class="card">
+            <div>
+                <div class="card-icon">🔍</div>
+                <h3>Image & Document Forensics</h3>
+                <p>Analyze JPG/PNG images and PDF, DOCX, PPTX files using ELA and author metadata tampering checks.</p>
+            </div>
+            <span class="card-link">Scan Media & Docs →</span>
+        </a>
+
+        <a href="/dashboard" class="card">
+            <div>
+                <div class="card-icon">🎙️</div>
+                <h3>Audio & Voice Clone Scanner</h3>
+                <p>Detect synthetic AI voice clones (ElevenLabs/Suno) and audio splicing via FFT Spectral Heatmaps.</p>
+            </div>
+            <span class="card-link">Scan Audio File →</span>
+        </a>
+
+        <a href="/dashboard" class="card">
+            <div>
+                <div class="card-icon">🔥</div>
+                <h3>Explainable Attention Heatmap</h3>
+                <p>Pinpoints exact manipulated pixels, cloned signatures, and synthetic AI noise regions visually.</p>
+            </div>
+            <span class="card-link">Try Heatmap →</span>
+        </a>
+
+        <a href="/login" class="card">
+            <div>
+                <div class="card-icon">⌨️</div>
+                <h3>Keystroke Biometric Auth</h3>
+                <p>SHA-256 encrypted vault combined with real-time typing rhythm (WPM & ms/key) verification.</p>
+            </div>
+            <span class="card-link">Test Biometrics →</span>
+        </a>
+
+        <a href="/history" class="card">
+            <div>
+                <div class="card-icon">🗄️</div>
+                <h3>Dual Audit Ledger</h3>
+                <p>Automatic sync across MySQL and SQLite3 registers with instant downloadable audit reports.</p>
+            </div>
+            <span class="card-link">View Audit Logs →</span>
+        </a>
+    </section>
+
+    <!-- 🚀 FUTURE SCOPE & UPCOMING ROADMAP (4 BOXES) -->
+    <div class="section-title">
+        <h2>🚀 Future Scope & Upcoming Roadmap</h2>
+        <span style="color:#d8b4fe;">PHASE 2 EXPANSION PLAN</span>
+    </div>
+    <section class="grid-container" style="padding-bottom: 3.5rem;">
+        <div class="future-card">
+            <span class="future-tag">PHASE 2 • DEEP LEARNING</span>
+            <h3>Vision Transformers (ViT) & Grad-CAM</h3>
+            <p>Integration of large-scale Vision Transformer models trained on FaceForensics++ and DFDC datasets for sub-pixel deepfake detection.</p>
+        </div>
+
+        <div class="future-card">
+            <span class="future-tag">PHASE 3 • LIVE STREAMING</span>
+            <h3>Real-Time Video Call & CCTV Shield</h3>
+            <p>Browser extension and live camera stream API to detect real-time face-swapping and synthetic voice spoofing during video calls.</p>
+        </div>
+
+        <div class="future-card">
+            <span class="future-tag">PHASE 4 • ENTERPRISE AUTH</span>
+            <h3>Role-Based Admin & Google OAuth 2.0</h3>
+            <p>Multi-tier organization access control with Google Single Sign-On (SSO) and automated supervisor approval workflows.</p>
+        </div>
+
+        <div class="future-card">
+            <span class="future-tag">PHASE 5 • MOBILE & BLOCKCHAIN</span>
+            <h3>Android / iOS App & Tamper-Proof Logs</h3>
+            <p>Dedicated mobile forensic app with SHA-256 blockchain hash anchoring for court-admissible digital evidence certification.</p>
+        </div>
+    </section>
+
+    <footer>
+        FORENSIC AI GUARD © 2026 | Developed by Ravikant Rajak | Department of Computer Science & Engineering, SRIST Jabalpur
+    </footer>
+</body>
+</html>
